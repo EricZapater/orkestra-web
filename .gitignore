@@ -1,0 +1,51 @@
+# 🟦 Node dependencies
+node_modules/
+
+# 🟩 Vite build output
+dist/
+
+# 🟨 Logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 🧪 Test coverage (si afegeixes tests més endavant)
+coverage/
+vitest-coverage/
+
+# 🔐 Environment files
+.env
+.env.*.local
+.env.local
+
+# 🧠 TypeScript
+*.tsbuildinfo
+
+# 🧰 Editor/IDE config
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# 🍎 macOS
+.DS_Store
+
+# 🖼️ Windows
+Thumbs.db
+
+# 💥 Swap files (Vim/VSCode)
+*.swp
+
+# 📦 Local server files
+*.local
+
+# 🌟 Volar (VS Code extension per Vue)
+.volar.config.ts
+
+# 🧪 Cypress (si ho incorpores més endavant)
+cypress/screenshots/
+cypress/videos/
+
+# 📚 Storybook (si ho afegeixes després)
+storybook-static/
