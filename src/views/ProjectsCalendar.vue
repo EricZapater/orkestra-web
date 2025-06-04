@@ -65,9 +65,7 @@ import { onMounted, ref, computed } from "vue";
 import { useToast } from "primevue/usetoast";
 import FullCalendar from "@fullcalendar/vue3";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin, {
-  type DateClickArg,
-} from "@fullcalendar/interaction";
+import interactionPlugin from "@fullcalendar/interaction";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import AppBreadCrumb from "../components/AppBreadCrumb.vue";
 import esLocale from "@fullcalendar/core/locales/es";
