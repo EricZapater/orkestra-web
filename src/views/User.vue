@@ -118,6 +118,7 @@ const newUser = ref<UserResponse>({
   is_verified: false,
   created_at: "",
   password_changed_at: "",
+  profile_id: "00000000-0000-0000-0000-000000000000",
 });
 const password2 = ref("");
 const title = ref("");
@@ -152,6 +153,8 @@ onMounted(async () => {
       if (fetchedUser) {
         user.value = fetchedUser;
         newUser.value = { ...fetchedUser };
+        newUser.value.profile_id =
+          fetchedUser.profile_id || "00000000-0000-0000-0000-000000000000";
         title.value = `Editar Usuari: ${fetchedUser.name} ${fetchedUser.surname}`;
       }
     } catch (error) {

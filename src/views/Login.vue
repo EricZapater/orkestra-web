@@ -10,7 +10,9 @@
         </div>
 
         <div class="field two-columns">
-          <div><label for="password">Contrasenya</label></div>
+          <div>
+            <label for="password">{{ $t("login.password") }}</label>
+          </div>
           <div>
             <Password
               id="password"
@@ -42,7 +44,9 @@ import { useToast } from "primevue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores/authStore";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const username = ref("");
 const password = ref("");
 const router = useRouter();

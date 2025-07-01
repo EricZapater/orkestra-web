@@ -18,9 +18,9 @@ export const useAuthStore = defineStore("auth", {
         this.token = response.data.token;
         this.user = response.data.user;
         this.expire = new Date(response.data.expire);
-        localStorage.setItem("acorda.token", this.token?.toString() || "");
-        localStorage.setItem("acorda.user", JSON.stringify(this.user));
-        localStorage.setItem("acorda.expire", this.expire?.toString() || "");
+        localStorage.setItem("orkestra.token", this.token?.toString() || "");
+        localStorage.setItem("orkestra.user", JSON.stringify(this.user));
+        localStorage.setItem("orkestra.expire", this.expire?.toString() || "");
       } catch (error) {
         console.error("Login error:", error);
         throw error;
@@ -30,9 +30,9 @@ export const useAuthStore = defineStore("auth", {
       try {
         this.token = null;
         this.user = null;
-        localStorage.removeItem("acorda.token");
-        localStorage.removeItem("acorda.user");
-        localStorage.removeItem("acorda.expire");
+        localStorage.removeItem("orkestra.token");
+        localStorage.removeItem("orkestra.user");
+        localStorage.removeItem("orkestra.expire");
       } catch (error) {
         console.error("Logout error:", error);
         throw error;

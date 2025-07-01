@@ -9,21 +9,17 @@
             :to="item.route"
             custom
           >
-            <a v-ripple :href="href" v-bind="props.action" @click="navigate">
-              <span :class="item.icon" />
+            <a
+              v-ripple
+              :href="href"
+              v-bind="props.action"
+              @click="navigate"
+              class="flex items-center py-2 px-3 rounded-md hover:bg-surface-200"
+            >
+              <span :class="item.icon" style="gap: 0.5em" />
               <span class="ml-2">{{ item.label }}</span>
             </a>
           </router-link>
-          <a
-            v-else
-            v-ripple
-            :href="item.url"
-            :target="item.target"
-            v-bind="props.action"
-          >
-            <span :class="item.icon" />
-            <span class="ml-2">{{ item.label }}</span>
-          </a>
         </template>
       </Menu>
     </div>
@@ -42,17 +38,38 @@ const items = ref([
     route: "/home",
   },
   {
-    separator: true,
-  },
-  {
-    label: "Gestió de projectes",
-    icon: "pi pi-cog",
+    label: "Projectes",
+    icon: "pi pi-briefcase",
     items: [
       {
         label: "Calendari",
         icon: "pi pi-calendar",
         route: "/projects/calendar",
       },
+      {
+        label: "Llistat",
+        icon: "pi pi-briefcase",
+        route: "/projects",
+      },
+      {
+        label: "Kanban Tasques",
+        icon: "pi pi-table",
+        route: "/kanban",
+      },
+      {
+        label: "Operaris",
+        icon: "pi pi-user",
+        route: "/operators",
+      },
+    ],
+  },
+  {
+    separator: true,
+  },
+  {
+    label: "Clients",
+    icon: "pi pi-calendar",
+    items: [
       {
         label: "Clients",
         icon: "pi pi-money-bill",
@@ -65,7 +82,7 @@ const items = ref([
   },
   {
     label: "Gestió de Reunions",
-    icon: "pi pi-cog",
+    icon: "pi pi-calendar",
     items: [
       {
         label: "Reunions",
@@ -83,8 +100,8 @@ const items = ref([
     separator: true,
   },
   {
-    label: "Gestió d'usuaris",
-    icon: "pi pi-cog",
+    label: "Gestió",
+    icon: "pi pi-users",
     items: [
       {
         label: "Usuaris",
@@ -96,23 +113,55 @@ const items = ref([
         icon: "pi pi-users",
         route: "/groups",
       },
+      {
+        label: "Perfils",
+        icon: "pi pi-users",
+        route: "/profiles",
+      },
+      {
+        label: "Menus",
+        icon: "pi pi-users",
+        route: "/menus",
+      },
     ],
   },
 ]);
 </script>
 
-<style scoped>
+<style>
 .sidebar {
   width: 250px;
   background-color: var(--surface-card);
   border-right: 1px solid var(--surface-border);
-  padding: 0rem;
+  padding: 1rem;
 }
 .sidebar ul {
   list-style: none;
   padding: 0;
 }
 .sidebar li {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+}
+/* Estils globals: no cal :deep */
+.p-menuitem {
+  margin-bottom: 0rem !important;
+}
+
+.p-menu .p-menuitem-link {
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  border-radius: 0.375rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.2s;
+}
+
+.p-menu .p-menuitem-link:hover {
+  background-color: var(--surface-hover);
 }
 </style>

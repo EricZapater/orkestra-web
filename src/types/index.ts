@@ -1,3 +1,5 @@
+import { Decimal } from "decimal.js";
+
 export type CreateUserRequest = {
   name?: string;
   surname?: string;
@@ -18,6 +20,7 @@ export type UserResponse = {
   is_active: boolean;
   created_at: string;
   password_changed_at: string;
+  profile_id: string;
 };
 export type LoginRequest = {
   username: string;
@@ -134,6 +137,8 @@ export type ProjectRequest = {
   end_date: Date | null;
   color: string;
   customer_id: string;
+  amount: string;
+  estimated_cost: string;
 };
 
 export type Project = {
@@ -143,6 +148,8 @@ export type Project = {
   end_date: string;
   color: string;
   customer_id: string;
+  amount: Decimal;
+  estimated_cost: Decimal;
 };
 
 export type ProjectCalendarResponse = {
@@ -169,4 +176,27 @@ export type Customer = {
 export type UserCustomerRequest = {
   customer_id: string;
   user_id: string;
+};
+
+export type TaskRequest = {
+  description: string;
+  notes: string;
+  user_id: string;
+  status: "Pending" | "ToDo" | "InProgress" | "Done";
+  priority: "A" | "B" | "C" | "D";
+  project_id: string;
+  start_date?: string | null;
+  end_date?: string | null;
+};
+
+export type Task = {
+  id: string;
+  description: string;
+  notes: string;
+  user_id: string;
+  status: "Pending" | "ToDo" | "InProgress" | "Done";
+  priority: "A" | "B" | "C" | "D";
+  project_id: string;
+  start_date?: string | null;
+  end_date?: string | null;
 };

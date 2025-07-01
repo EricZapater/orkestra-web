@@ -56,6 +56,7 @@
             class="p-button-text p-button-sm"
             title="Veure"
           />
+
           <Button
             icon="pi pi-trash"
             class="p-button-text p-button-sm"
@@ -67,53 +68,10 @@
       </Column>
     </DataTable>
 
-    <Dialog
+    <CustomerForm
       v-model:visible="showCreateDialog"
-      modal
-      header="Crear grup"
-      :style="{ width: '50rem' }"
-    >
-      <div class="field two-columns">
-        <div><label for="comercial_name">Nom comercial</label></div>
-        <div>
-          <InputText
-            id="comercial_name"
-            v-model="newCustomer.comercial_name"
-            autofocus
-            class="w-full"
-          />
-        </div>
-      </div>
-      <div class="field four-columns gap-2">
-        <div><label for="vat_number">CIF</label></div>
-        <div>
-          <InputText
-            id="vat_number"
-            v-model="newCustomer.vat_number"
-            autofocus
-            class="w-full"
-          />
-        </div>
-        <div><label for="phone_number">Telèfon</label></div>
-        <div>
-          <InputText
-            id="phone_number"
-            v-model="newCustomer.phone_number"
-            autofocus
-            class="w-full"
-          />
-        </div>
-      </div>
-      <template #footer>
-        <Button
-          label="Cancel·la"
-          icon="pi pi-times"
-          class="p-button-text"
-          @click="showCreateDialog = false"
-        />
-        <Button label="Crea" icon="pi pi-check" @click="handleCreateCustomer" />
-      </template>
-    </Dialog>
+      @submit="handleCreateCustomer"
+    />
   </div>
 </template>
 <script setup lang="ts">
@@ -126,6 +84,7 @@ import { formatDate } from "../utils/date";
 import { FilterMatchMode } from "@primevue/core/api";
 import { useRouter } from "vue-router";
 import AppBreadCrumb from "../components/AppBreadCrumb.vue";
+import CustomerForm from "../components/CustomerForm.vue";
 
 const groupStore = useGroupStore();
 const customerStore = useCustomerStore();
@@ -165,51 +124,16 @@ async function loadCustomers() {
   customers.value = customerStore.customers;
 }
 
-async function handleCreateCustomer() {
-  if (newCustomer.value.comercial_name === "") {
-    toast.add({
-      severity: "warn",
-      summary: "Camp buit",
-      detail: "El nom del client és obligatori",
-      life: 3000,
-    });
-    return;
-  }
-
-  if (newCustomer.value.phone_number === "") {
-    toast.add({
-      severity: "warn",
-      summary: "Camp buit",
-      detail: "El telèfon del client és obligatori",
-      life: 3000,
-    });
-    return;
-  }
-
-  if (newCustomer.value.vat_number === "") {
-    toast.add({
-      severity: "warn",
-      summary: "Camp buit",
-      detail: "El cif del client és obligatori",
-      life: 3000,
-    });
-    return;
-  }
-
+async function handleCreateCustomer(data: CustomerRequest) {
   try {
-    await customerStore.createCustomer(newCustomer.value);
+    await customerStore.createCustomer(data);
     toast.add({
       severity: "success",
       summary: "Client creat",
-      detail: `Client "${newCustomer.value.comercial_name}" creat correctament`,
+      detail: `Client "${data.comercial_name}" creat correctament`,
       life: 3000,
     });
     await loadCustomers();
-    newCustomer.value = {
-      comercial_name: "",
-      vat_number: "",
-      phone_number: "",
-    };
     showCreateDialog.value = false;
   } catch (error) {
     toast.add({

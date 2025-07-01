@@ -9,6 +9,7 @@
       </main>
     </div>
     <RouterView v-else />
+    <ConfirmDialog />
   </div>
 </template>
 

@@ -7,3 +7,17 @@ export function formatURLDate(dateString: string): string {
   const formatted = date.toISOString().split("T")[0];
   return formatted;
 }
+
+export function setStartOfDay(date: Date | null): Date | null {
+  if (!date) return null;
+  const newDate = new Date(date);
+  newDate.setHours(0, 0, 0, 0);
+  return newDate;
+}
+
+export function setEndOfDay(date: Date | null): Date | null {
+  if (!date) return null;
+  const newDate = new Date(date);
+  newDate.setHours(23, 59, 59, 999);
+  return newDate;
+}

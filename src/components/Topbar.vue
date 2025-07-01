@@ -9,7 +9,7 @@
 
     <!-- Centre: Títol -->
     <div class="flex-1 text-center hidden sm:block">
-      <span class="app-title">Acorda APP</span>
+      <span class="app-title">Orkestra APP</span>
     </div>
 
     <!-- Dreta: Info d'usuari -->
@@ -37,7 +37,9 @@ const surname = ref("");
 const username = ref("");
 const authStore = useAuthStore();
 const router = useRouter();
-const user = JSON.parse(localStorage.getItem("acorda.user")?.toString() || "");
+const user = JSON.parse(
+  localStorage.getItem("orkestra.user")?.toString() || ""
+);
 onMounted(() => {
   if (user) {
     name.value = user.name;

@@ -35,9 +35,17 @@ import {
   InputGroupAddon,
   Chip,
   ColorPicker,
+  PanelMenu,
+  Checkbox,
+  Tag,
 } from "primevue";
+import ConfirmDialog from "primevue/confirmdialog";
+import { ConfirmationService } from "primevue";
 import ToastService from "primevue/toastservice";
 import Toast from "primevue/toast";
+import { i18n } from "./i18n";
+
+import { vSortable } from "./directives/sortable";
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -49,6 +57,8 @@ app.use(PrimeVue, {
 app.use(pinia);
 app.use(router);
 app.use(ToastService);
+app.use(i18n);
+app.use(ConfirmationService);
 
 app.component("DataTable", DataTable);
 app.component("Column", Column);
@@ -76,7 +86,12 @@ app.component("InputGroup", InputGroup);
 app.component("InputGroupAddon", InputGroupAddon);
 app.component("Chip", Chip);
 app.component("ColorPicker", ColorPicker);
+app.component("ConfirmDialog", ConfirmDialog);
+app.component("PanelMenu", PanelMenu);
+app.component("Checkbox", Checkbox);
+app.component("Tag", Tag);
 
 app.directive("Tooltip", Tooltip);
+app.directive("sortable", vSortable);
 
 app.mount("#app");

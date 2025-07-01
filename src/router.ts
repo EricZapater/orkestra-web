@@ -12,6 +12,9 @@ import Search from "./views/Search.vue";
 import Test from "./views/Test.vue";
 import ProjectsCalendar from "./views/ProjectsCalendar.vue";
 import Customers from "./views/Customers.vue";
+import Projects from "./views/Projects.vue";
+import Project from "./views/Project.vue";
+import Kanban from "./views/Kanban.vue";
 
 const routes = [
   { path: "/login", component: Login },
@@ -45,6 +48,21 @@ const routes = [
     component: ProjectsCalendar,
     meta: { requiresAuth: true },
   },
+  {
+    path: "/projects",
+    component: Projects,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/project/:id",
+    component: Project,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/kanban",
+    component: Kanban,
+    meta: { requiresAuth: true },
+  },
 ];
 
 const router = createRouter({
@@ -55,7 +73,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (
     to.meta.requiresAuth &&
-    (!localStorage.getItem("acorda.token") || isTokenExpiredFromDate())
+    (!localStorage.getItem("orkestra.token") || isTokenExpiredFromDate())
   ) {
     next({ path: "/login" });
   } else {
@@ -64,7 +82,7 @@ router.beforeEach((to, from, next) => {
 });
 
 function isTokenExpiredFromDate(): boolean {
-  const expire = localStorage.getItem("acorda.expire");
+  const expire = localStorage.getItem("orkestra.expire");
   if (!expire) return true;
 
   return new Date(expire).getTime() < Date.now();

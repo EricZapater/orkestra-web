@@ -1,5 +1,5 @@
 import type { AxiosResponse } from "axios";
-import type { ProjectRequest } from "../types";
+import type { ProjectRequest, Project } from "../types";
 import apiClient from "../plugins/apiClient";
 
 export const projectService = {
@@ -11,6 +11,44 @@ export const projectService = {
       }
       return res;
     } catch (error) {
+      throw error;
+    }
+  },
+  async updateProject(data: Project): Promise<AxiosResponse> {
+    try {
+      const res = await apiClient.put(`/projects/${data.id}`, data);
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  },
+  async deleteProject(id: string): Promise<AxiosResponse> {
+    try {
+      const res = await apiClient.delete(`/projects/${id}`);
+      if (res.status > 299) {
+        throw new Error("Delete project failed");
+      }
+      return res;
+    } catch (error) {
+      console.error("Delete project error:", error);
+      throw error;
+    }
+  },
+  async getProjects(): Promise<AxiosResponse> {
+    try {
+      const res = await apiClient.get("/projects");
+      return res;
+    } catch (error) {
+      console.error("Get projects error:", error);
+      throw error;
+    }
+  },
+  async getProjectById(id: string): Promise<AxiosResponse> {
+    try {
+      const res = await apiClient.get(`/projects/${id}`);
+      return res;
+    } catch (error) {
+      console.error("Get projects error:", error);
       throw error;
     }
   },
