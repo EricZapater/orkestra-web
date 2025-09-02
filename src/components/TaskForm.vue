@@ -82,26 +82,34 @@
 
       <!-- Data d'inici (només lectura) -->
       <div class="field">
-        <label for="start_date">Data d'inici</label>
-        <InputText
-          id="start_date"
-          :value="formattedStartDate"
-          placeholder="No definida"
-          readonly
-          class="readonly-field"
+        <label for="start_date">Data d'inici *</label>
+        <DatePicker
+          id="startDate"
+          v-model="startDate"
+          dateFormat="dd/mm/yy"
+          showIcon
+          placeholder="Selecciona data d'inici"
+          :class="{ 'p-invalid': errors.start_date }"
         />
+        <small v-if="errors.start_date" class="p-error">{{
+          errors.start_date
+        }}</small>
       </div>
 
       <!-- Data de finalització (només lectura) -->
       <div class="field">
-        <label for="end_date">Data de finalització</label>
-        <InputText
-          id="end_date"
-          :value="formattedEndDate"
-          placeholder="No definida"
-          readonly
-          class="readonly-field"
+        <label for="end_date">Data de finalització *</label>
+        <DatePicker
+          id="endDate"
+          v-model="endDate"
+          dateFormat="dd/mm/yy"
+          showIcon
+          placeholder="Selecciona data de finalització"
+          :class="{ 'p-invalid': errors.end_date }"
         />
+        <small v-if="errors.end_date" class="p-error">{{
+          errors.end_date
+        }}</small>
       </div>
     </div>
 
@@ -139,10 +147,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from "vue";
+import { ref, computed, watch, onMounted, nextTick } from "vue";
 import type { Task, UserResponse } from "../types";
 import { useProjectStore } from "../stores/projectStore";
 import { useUserStore } from "../stores/userStore";
+import { useToast } from "primevue";
 
 // Props
 interface Props {
@@ -166,6 +175,62 @@ const emit = defineEmits<{
 // Stores
 const projectStore = useProjectStore();
 const userStore = useUserStore();
+const toast = useToast();
+
+const startDate = computed({
+  get: () => {
+    return formData.value.start_date
+      ? new Date(formData.value.start_date)
+      : null;
+  },
+  set: (value: Date | null) => {
+    formData.value.start_date = value ? value.toISOString() : "";
+    // Forçar revalidació quan canvia la data
+    nextTick(() => {
+      validateDateFields();
+    });
+  },
+});
+
+const endDate = computed({
+  get: () => {
+    return formData.value.end_date ? new Date(formData.value.end_date) : null;
+  },
+  set: (value: Date | null) => {
+    formData.value.end_date = value ? value.toISOString() : "";
+    // Forçar revalidació quan canvia la data
+    nextTick(() => {
+      validateDateFields();
+    });
+  },
+});
+
+const validateDateFields = () => {
+  // Netejar errors de dates
+  errors.value.start_date = "";
+  errors.value.end_date = "";
+
+  // Validar data d'inici
+  if (!formData.value.start_date) {
+    errors.value.start_date = "La data d'inici és obligatòria";
+    return;
+  }
+
+  // Validar data de finalització
+  if (!formData.value.end_date) {
+    errors.value.end_date = "La data de finalització és obligatòria";
+    return;
+  }
+
+  // Validar que la data de finalització sigui posterior a la d'inici
+  const start = new Date(formData.value.start_date);
+  const end = new Date(formData.value.end_date);
+
+  if (end <= start) {
+    errors.value.end_date =
+      "La data de finalització ha de ser posterior a la d'inici";
+  }
+};
 
 // Form data
 const formData = ref({
@@ -176,8 +241,8 @@ const formData = ref({
   status: "ToDo" as Task["status"],
   priority: "C" as Task["priority"],
   project_id: "",
-  start_date: null as string | null,
-  end_date: null as string | null,
+  start_date: "",
+  end_date: "",
 });
 
 // Form validation
@@ -231,12 +296,26 @@ const formattedEndDate = computed(() => {
 });
 
 const isFormValid = computed(() => {
-  return (
-    formData.value.description.trim() !== "" &&
-    formData.value.project_id.trim() !== "" &&
-    formData.value.user_id.trim() !== "" &&
-    !Object.values(errors.value).some((error) => error !== "")
-  );
+  // Comprovar camps obligatoris
+  const hasDescription = formData.value.description.trim() !== "";
+  const hasProjectId = formData.value.project_id.trim() !== "";
+  const hasUserId = formData.value.user_id.trim() !== "";
+  const hasStartDate = formData.value.start_date.trim() !== "";
+  const hasEndDate = formData.value.end_date.trim() !== "";
+
+  // Comprovar errors
+  const hasErrors = Object.values(errors.value).some((error) => error !== "");
+
+  const isValid =
+    hasDescription &&
+    hasProjectId &&
+    hasUserId &&
+    hasStartDate &&
+    hasEndDate &&
+    !hasErrors;
+
+  console.log("Form valid:", isValid);
+  return isValid;
 });
 
 // Methods
@@ -288,6 +367,8 @@ const validateForm = () => {
     isValid = false;
   }
 
+  validateDateFields();
+
   return isValid;
 };
 
@@ -314,15 +395,22 @@ const resetForm = () => {
     status: "ToDo",
     priority: "C",
     project_id: "",
-    start_date: null,
-    end_date: null,
+    start_date: "",
+    end_date: "",
   };
   projectDescription.value = "";
 
   // Reset errors
-  Object.keys(errors.value).forEach((key) => {
-    errors.value[key as keyof typeof errors.value] = "";
-  });
+  errors.value = {
+    description: "",
+    status: "",
+    priority: "",
+    project_id: "",
+    user_id: "",
+    start_date: "",
+    end_date: "",
+    notes: "",
+  };
 };
 
 const loadTaskData = async () => {
@@ -335,8 +423,8 @@ const loadTaskData = async () => {
       status: props.task.status,
       priority: props.task.priority,
       project_id: props.task.project_id,
-      start_date: props.task.start_date ?? null,
-      end_date: props.task.end_date ?? null,
+      start_date: props.task.start_date ?? "",
+      end_date: props.task.end_date ?? "",
     };
 
     // Carrega la informació del projecte
@@ -350,6 +438,16 @@ const loadTaskData = async () => {
 
 const handleSubmit = () => {
   if (!validateForm()) return;
+  if (!startDate.value || !endDate.value) {
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Les dates d'inici i final són obligatòries.",
+    });
+    return;
+  }
+  formData.value.start_date = startDate.value.toISOString();
+  formData.value.end_date = endDate.value.toISOString();
 
   const taskData: Task = {
     ...formData.value,

@@ -69,7 +69,27 @@
           />
         </div>
       </div>
-
+      <!-- Partides econòmiques -->
+      <div class="two-columns">
+        <div class="field">
+          <label for="estimated_cost">Cost estimat</label>
+          <InputText
+            id="estimated_cost"
+            v-model="project.estimated_cost"
+            :class="{ 'p-invalid': errors.estimated_cost }"
+            required
+          />
+        </div>
+        <div class="field">
+          <label for="amount">Import venta</label>
+          <InputText
+            id="estimated_cost"
+            v-model="project.amount"
+            :class="{ 'p-invalid': errors.amount }"
+            required
+          />
+        </div>
+      </div>
       <!-- Accions -->
       <div class="form-actions">
         <Button
@@ -91,9 +111,14 @@
 </template>
 
 <script setup lang="ts">
-import { toRefs } from "vue";
+import { toRefs, ref } from "vue";
 import { setStartOfDay, setEndOfDay } from "../utils/date";
 import type { ProjectRequest } from "../types";
+
+const errors = ref({
+  estimated_cost: "",
+  amount: "",
+});
 
 const props = defineProps<{
   visible: boolean;

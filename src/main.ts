@@ -9,35 +9,37 @@ import App from "./App.vue";
 import router from "./router";
 
 import {
-  Button,
-  DataTable,
-  Column,
-  InputText,
-  Select,
-  Password,
-  Card,
-  Menu,
-  Dialog,
-  ToggleSwitch,
-  Listbox,
   Breadcrumb,
-  DatePicker,
-  Textarea,
-  Tabs,
-  TabList,
-  Tab,
-  TabPanel,
-  TabPanels,
-  Tooltip,
-  IconField,
-  InputIcon,
-  InputGroup,
-  InputGroupAddon,
+  Button,
+  Card,
+  Checkbox,
   Chip,
   ColorPicker,
+  Column,
+  DataTable,
+  DatePicker,
+  Dialog,
+  IconField,
+  InputGroup,
+  InputGroupAddon,
+  InputIcon,
+  InputNumber,
+  InputText,
+  Listbox,
+  Menu,
+  MultiSelect,
   PanelMenu,
-  Checkbox,
+  Password,
+  Select,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
   Tag,
+  Textarea,
+  ToggleSwitch,
+  Tooltip,
 } from "primevue";
 import ConfirmDialog from "primevue/confirmdialog";
 import { ConfirmationService } from "primevue";
@@ -64,6 +66,7 @@ app.component("DataTable", DataTable);
 app.component("Column", Column);
 app.component("Button", Button);
 app.component("InputText", InputText);
+app.component("InputNumber", InputNumber);
 app.component("Select", Select);
 app.component("Password", Password);
 app.component("Card", Card);
@@ -90,6 +93,7 @@ app.component("ConfirmDialog", ConfirmDialog);
 app.component("PanelMenu", PanelMenu);
 app.component("Checkbox", Checkbox);
 app.component("Tag", Tag);
+app.component("MultiSelect", MultiSelect);
 
 app.directive("Tooltip", Tooltip);
 app.directive("sortable", vSortable);

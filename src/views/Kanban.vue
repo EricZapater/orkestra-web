@@ -217,15 +217,17 @@ const breadcrumbItems = ref([
 ]);
 
 // Methods
-const refreshTasks = async () => {
+const refreshTasks = async (onMounted: boolean) => {
   try {
     await taskStore.fetchTasks();
-    toast.add({
-      severity: "success",
-      summary: "Èxit",
-      detail: "Tasques actualitzades correctament",
-      life: 3000,
-    });
+    if (!onMounted) {
+      toast.add({
+        severity: "success",
+        summary: "Èxit",
+        detail: "Tasques actualitzades correctament",
+        life: 3000,
+      });
+    }
   } catch (error) {
     toast.add({
       severity: "error",
@@ -273,7 +275,7 @@ const handleDrop = async (evt: SortableEvent, newStatus: Task["status"]) => {
     });
 
     // Refrescar les tasques
-    await refreshTasks();
+    await refreshTasks(false);
   } catch (error) {
     toast.add({
       severity: "error",
@@ -283,7 +285,7 @@ const handleDrop = async (evt: SortableEvent, newStatus: Task["status"]) => {
     });
 
     // Revertir el canvi visual
-    await refreshTasks();
+    await refreshTasks(false);
   }
 };
 
@@ -305,7 +307,7 @@ const saveTask = async (updatedTask: Task) => {
       life: 3000,
     });
 
-    await refreshTasks();
+    await refreshTasks(false);
   } catch (error) {
     toast.add({
       severity: "error",
@@ -335,7 +337,7 @@ const deleteTask = (task: Task) => {
           life: 3000,
         });
 
-        await refreshTasks();
+        await refreshTasks(false);
       } catch (error) {
         toast.add({
           severity: "error",
@@ -362,7 +364,7 @@ onMounted(async () => {
     console.error("Error carregant preferència de filtre:", error);
   }
 
-  refreshTasks();
+  refreshTasks(true);
 });
 </script>
 

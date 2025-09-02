@@ -7,6 +7,7 @@ export type CreateUserRequest = {
   email: string;
   username: string;
   password: string;
+  profile_id: string;
 };
 export type UserResponse = {
   id: string;
@@ -185,8 +186,8 @@ export type TaskRequest = {
   status: "Pending" | "ToDo" | "InProgress" | "Done";
   priority: "A" | "B" | "C" | "D";
   project_id: string;
-  start_date?: string | null;
-  end_date?: string | null;
+  start_date?: string;
+  end_date?: string;
 };
 
 export type Task = {
@@ -197,6 +198,90 @@ export type Task = {
   status: "Pending" | "ToDo" | "InProgress" | "Done";
   priority: "A" | "B" | "C" | "D";
   project_id: string;
-  start_date?: string | null;
-  end_date?: string | null;
+  start_date?: string;
+  end_date?: string;
+};
+
+export type CostItem = {
+  id: string;
+  project_id: string;
+  amount: string;
+  short_description: string;
+  notes: string;
+  date: string;
+};
+
+export type CostItemRequest = {
+  project_id: string;
+  amount: string;
+  short_description: string;
+  notes: string;
+  date: string;
+};
+
+export type MenuRequest = {
+  label: string;
+  icon: string;
+  route: string;
+  parent_id?: string | null;
+  sort_order: number;
+  is_separator: boolean;
+};
+
+export type MenuToProfileRequest = {
+  ProfileID: string;
+  MenuID: string;
+};
+
+export type Menu = {
+  id: string;
+  label: string;
+  icon: string;
+  route: string;
+  parent_id?: string | null;
+  sort_order: number;
+  is_separator: boolean;
+};
+
+export type MenuTree = {
+  id: string;
+  label: string;
+  icon: string;
+  route: string;
+  parent_id?: string;
+  sort_order: number;
+  is_separator: boolean;
+  children?: MenuTree[];
+};
+
+export type OperatorRequest = {
+  name: string;
+  surname: string;
+  cost: string;
+};
+
+export type Operator = {
+  id: string;
+  name: string;
+  surname: string;
+  cost: number;
+};
+
+export type OperatorToProjectRequest = {
+  operator_id: string;
+  project_id: string;
+  cost: string;
+  dedication_percentage: string;
+  start_date: string;
+  end_date: string;
+};
+
+export type OperatorToProject = {
+  id: string;
+  operator_id: string;
+  project_id: string;
+  cost: number;
+  dedicaton_percentage: number;
+  start_date: string;
+  end_date: string;
 };

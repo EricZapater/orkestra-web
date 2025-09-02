@@ -32,8 +32,8 @@ export const useTaskStore = defineStore("task", {
         const response = await taskService.createTask(data);
         if (response.status > 299) throw new Error("Create task failed");
 
-        // Afegir la nova tasca a l'estat local
-        this.tasks.push(response.data);
+        await this.fetchTasksByProjectId(data.project_id);
+
         return response;
       } catch (error) {
         throw error;

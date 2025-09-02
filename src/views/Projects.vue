@@ -2,6 +2,12 @@
   <AppBreadCrumb :home="home" :model="breadcrumbItems" />
   <div class="card">
     <h2>Projectes</h2>
+    <Button
+      label="Crear projecte"
+      icon="pi pi-plus"
+      class="p-button"
+      @click="showCreateDialog = true"
+    />
     <DataTable
       :value="projectStore.projects"
       dataKey="id"
@@ -9,7 +15,6 @@
       :rows="10"
       :showGridlines="true"
     >
-      <Column field="id" header="ID" />
       <Column field="customer_id" header="Client">
         <template #body="slotProps">
           {{ customerIdToName.get(slotProps.data.customer_id) || "—" }}
@@ -44,6 +49,13 @@
         </template>
       </Column>
     </DataTable>
+    <ProjectFormDialog
+      v-model:visible="showCreateDialog"
+      :editMode="editMode"
+      :project="newProject"
+      :customers="customerStore.customers"
+      @submit="handleAddProject"
+    />
   </div>
 </template>
 <script setup lang="ts">
@@ -51,10 +63,19 @@ import { computed, onMounted, ref } from "vue";
 import AppBreadCrumb from "../components/AppBreadCrumb.vue";
 import { useProjectStore } from "../stores/projectStore";
 import { useCustomerStore } from "../stores/customerStore";
-import { formatDate } from "../utils/date";
+import {
+  formatURLDate,
+  formatDate,
+  setStartOfDay,
+  setEndOfDay,
+} from "../utils/date";
 import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue";
 import { useRouter } from "vue-router";
+import type { ProjectRequest, Project } from "../types";
+import Decimal from "decimal.js";
+import { extractErrorMessage } from "../utils/errormessage";
+import ProjectFormDialog from "../components/ProjectFormDialog.vue";
 
 const toast = useToast();
 const confirm = useConfirm();
@@ -75,6 +96,19 @@ const customerIdToName = computed(() => {
     map.set(customer.id, customer.comercial_name);
   }
   return map;
+});
+const zero = new Decimal(0);
+
+const showCreateDialog = ref(false);
+const editMode = ref(false);
+const newProject = ref<ProjectRequest>({
+  description: "",
+  start_date: null,
+  end_date: null,
+  color: "",
+  customer_id: "",
+  amount: "0",
+  estimated_cost: "0",
 });
 
 onMounted(async () => {
@@ -114,5 +148,60 @@ const handleDelete = async (data: any) => {
       }
     },
   });
+};
+
+const handleAddProject = async () => {
+  try {
+    if (!editMode.value) {
+      newProject.value.start_date = setStartOfDay(newProject.value.start_date);
+      newProject.value.end_date = setEndOfDay(newProject.value.end_date);
+      const res = await projectStore.createProject(newProject.value);
+      toast.add({
+        severity: "success",
+        summary: "Projecte creat",
+        detail: `${newProject.value.description} - ${res.data.id}`,
+        life: 3000,
+      });
+    } else {
+      newProject.value.start_date = setStartOfDay(newProject.value.start_date);
+      newProject.value.end_date = setEndOfDay(newProject.value.end_date);
+      const Project = ref<Project>({
+        id: projectStore.selectedProject?.id ?? "",
+        description: newProject.value.description,
+        start_date: newProject.value.start_date?.toISOString() ?? "",
+        end_date: newProject.value.end_date?.toISOString() ?? "",
+        color: newProject.value.color,
+        customer_id: projectStore.selectedProject?.customer_id ?? "",
+        amount: zero,
+        estimated_cost: zero,
+      });
+
+      const res = await projectStore.updateProject(Project.value);
+      toast.add({
+        severity: "success",
+        summary: "Projecte actualitzat",
+        detail: `${newProject.value.description} - ${res.data.id}`,
+        life: 3000,
+      });
+    }
+    projectStore.fetchProjects();
+    showCreateDialog.value = false;
+    newProject.value = {
+      description: "",
+      start_date: null,
+      end_date: null,
+      color: "",
+      customer_id: "",
+      amount: "0",
+      estimated_cost: "0",
+    };
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: extractErrorMessage(error),
+      life: 3000,
+    });
+  }
 };
 </script>

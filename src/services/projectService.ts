@@ -1,5 +1,9 @@
 import type { AxiosResponse } from "axios";
-import type { ProjectRequest, Project } from "../types";
+import type {
+  ProjectRequest,
+  Project,
+  OperatorToProjectRequest,
+} from "../types";
 import apiClient from "../plugins/apiClient";
 
 export const projectService = {
@@ -59,6 +63,61 @@ export const projectService = {
     try {
       const res = await apiClient.get(
         `/projects/calendar/dates?start_date=${startDate}&end_date=${endDate}`
+      );
+      if (res.status > 299) {
+        throw new Error("Get project calendar failed");
+      }
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  },
+  async addOperatorToProject(
+    request: OperatorToProjectRequest
+  ): Promise<AxiosResponse> {
+    try {
+      const res = await apiClient.post("/projects/operators", request);
+      if (res.status > 299) {
+        throw new Error("Add operator to project failed");
+      }
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  },
+  async removeOperatorFromProject(
+    request: OperatorToProjectRequest
+  ): Promise<AxiosResponse> {
+    try {
+      const res = await apiClient.delete("/projects/operators", {
+        data: request,
+      });
+      if (res.status > 299) {
+        throw new Error("Remove operator from project failed");
+      }
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  },
+  async getOperatorsFromProject(projectId: string): Promise<AxiosResponse> {
+    try {
+      const res = await apiClient.get(`/projects/operators/${projectId}`);
+      if (res.status > 299) {
+        throw new Error("Get operators from project failed");
+      }
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  },
+  async getOperatorsCalendarBetweenDates(
+    startDate: string,
+    endDate: string
+  ): Promise<AxiosResponse> {
+    try {
+      const res = await apiClient.get(
+        `/projects/operators/calendar/dates?start_date=${startDate}&end_date=${endDate}`
       );
       if (res.status > 299) {
         throw new Error("Get project calendar failed");

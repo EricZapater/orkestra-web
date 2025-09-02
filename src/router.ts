@@ -11,10 +11,14 @@ import Meeting from "./views/Meeting.vue";
 import Search from "./views/Search.vue";
 import Test from "./views/Test.vue";
 import ProjectsCalendar from "./views/ProjectsCalendar.vue";
+import OperatorsCalendar from "./views/OperatorsCalendar.vue";
 import Customers from "./views/Customers.vue";
 import Projects from "./views/Projects.vue";
 import Project from "./views/Project.vue";
 import Kanban from "./views/Kanban.vue";
+import Menus from "./views/Menus.vue";
+import Tasks from "./views/Tasks.vue";
+import Operators from "./views/Operators.vue";
 
 const routes = [
   { path: "/login", component: Login },
@@ -59,8 +63,28 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
+    path: "/projects/tasks",
+    component: Tasks,
+    meta: { requiresAuth: true },
+  },
+  {
     path: "/kanban",
     component: Kanban,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/menus",
+    component: Menus,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/operators",
+    component: Operators,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/operators/calendar",
+    component: OperatorsCalendar,
     meta: { requiresAuth: true },
   },
 ];

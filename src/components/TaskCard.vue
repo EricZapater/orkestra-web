@@ -44,9 +44,9 @@
         </div>
       </div>
 
-      <div class="task-project" v-if="task.project_id">
+      <!--<div class="task-project" v-if="task.project_id">
         <Chip :label="getProjectName(task.project_id)" class="project-chip" />
-      </div>
+      </div>-->
     </div>
   </div>
 </template>
@@ -133,8 +133,8 @@ const isOverdue = computed(() => {
 .task-card {
   background: white;
   border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 0.75rem;
+  padding: 0.5rem;
+  margin-bottom: 0.25rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-left: 4px solid #ddd;
   cursor: grab;
@@ -172,7 +172,7 @@ const isOverdue = computed(() => {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.1rem;
 }
 
 .priority-indicator {
@@ -196,7 +196,7 @@ const isOverdue = computed(() => {
 }
 
 .task-content {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .task-description {
@@ -204,7 +204,7 @@ const isOverdue = computed(() => {
   font-size: 1rem;
   font-weight: 600;
   color: #2c3e50;
-  line-height: 1.4;
+  line-height: 1;
 }
 
 .task-notes {

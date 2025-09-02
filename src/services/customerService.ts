@@ -73,13 +73,24 @@ export const customerService = {
       throw error;
     }
   },
-  async removeUserToCustomer(
+  async removeUserFromCustomer(
     data: UserCustomerRequest
   ): Promise<AxiosResponse> {
     try {
       const res = await apiClient.post("/customers/removeuser", data);
       if (res.status > 299) {
         throw new Error("Remove user from customer failed");
+      }
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  },
+  async getUsersByCustomerID(id: string): Promise<AxiosResponse> {
+    try {
+      const res = await apiClient.get(`/customers/userbycustomer/${id}`);
+      if (res.status > 299) {
+        throw new Error("Get users from customer failed");
       }
       return res;
     } catch (error) {

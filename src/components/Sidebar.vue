@@ -42,14 +42,19 @@ const items = ref([
     icon: "pi pi-briefcase",
     items: [
       {
+        label: "Llistat Projectes",
+        icon: "pi pi-briefcase",
+        route: "/projects",
+      },
+      {
         label: "Calendari",
         icon: "pi pi-calendar",
         route: "/projects/calendar",
       },
       {
-        label: "Llistat",
-        icon: "pi pi-briefcase",
-        route: "/projects",
+        label: "Llistat Tasques",
+        icon: "pi pi-list",
+        route: "/projects/tasks",
       },
       {
         label: "Kanban Tasques",
@@ -60,6 +65,11 @@ const items = ref([
         label: "Operaris",
         icon: "pi pi-user",
         route: "/operators",
+      },
+      {
+        label: "Calendari Operaris",
+        icon: "pi pi-calendar",
+        route: "/operators/calendar",
       },
     ],
   },
@@ -81,25 +91,6 @@ const items = ref([
     separator: true,
   },
   {
-    label: "Gestió de Reunions",
-    icon: "pi pi-calendar",
-    items: [
-      {
-        label: "Reunions",
-        icon: "pi pi-calendar",
-        route: "/meetings",
-      },
-      {
-        label: "Cercador",
-        icon: "pi pi-search",
-        route: "/search",
-      },
-    ],
-  },
-  {
-    separator: true,
-  },
-  {
     label: "Gestió",
     icon: "pi pi-users",
     items: [
@@ -109,18 +100,13 @@ const items = ref([
         route: "/users",
       },
       {
-        label: "Grups",
-        icon: "pi pi-users",
-        route: "/groups",
-      },
-      {
         label: "Perfils",
         icon: "pi pi-users",
         route: "/profiles",
       },
       {
         label: "Menus",
-        icon: "pi pi-users",
+        icon: "pi pi-align-justify",
         route: "/menus",
       },
     ],

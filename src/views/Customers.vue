@@ -6,14 +6,15 @@
       label="Crear client"
       icon="pi pi-plus"
       class="p-button"
-      @click="showCreateDialog = true"
+      @click="openCreateDialog"
     />
+
     <DataTable
       v-model:filters="filters"
       dataKey="id"
       filterDisplay="row"
       :globalFilterFields="['comercial_name', 'vat_number', 'phone_number']"
-      :value="customers"
+      :value="customerStore.customers"
       tableStyle="min-width: 50rem"
       :showGridlines="true"
       :paginator="true"
@@ -29,6 +30,7 @@
           />
         </template>
       </Column>
+
       <Column field="vat_number" header="CIF">
         <template #filter="{ filterModel, filterCallback }">
           <InputText
@@ -39,6 +41,7 @@
           />
         </template>
       </Column>
+
       <Column field="phone_number" header="Num. Telèfon">
         <template #filter="{ filterModel, filterCallback }">
           <InputText
@@ -49,14 +52,15 @@
           />
         </template>
       </Column>
+
       <Column header="Accions" style="width: 10rem">
         <template #body="slotProps">
           <Button
-            icon="pi pi-eye"
+            icon="pi pi-pencil"
             class="p-button-text p-button-sm"
-            title="Veure"
+            title="Editar"
+            @click="openEditDialog(slotProps.data)"
           />
-
           <Button
             icon="pi pi-trash"
             class="p-button-text p-button-sm"
@@ -69,39 +73,42 @@
     </DataTable>
 
     <CustomerForm
-      v-model:visible="showCreateDialog"
-      @submit="handleCreateCustomer"
+      v-model:visible="showDialog"
+      :editMode="editMode"
+      :customer="selectedCustomer"
+      :users="userStore.users"
+      @success="handleFormSuccess"
     />
   </div>
 </template>
+
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { useToast } from "primevue/usetoast";
-import { useGroupStore } from "../stores/groupStore";
 import { useCustomerStore } from "../stores/customerStore";
-import type { GroupResponse, Customer, CustomerRequest } from "../types";
-import { formatDate } from "../utils/date";
+import { useUserStore } from "../stores/userStore";
+import type { Customer } from "../types";
 import { FilterMatchMode } from "@primevue/core/api";
-import { useRouter } from "vue-router";
 import AppBreadCrumb from "../components/AppBreadCrumb.vue";
 import CustomerForm from "../components/CustomerForm.vue";
 
-const groupStore = useGroupStore();
 const customerStore = useCustomerStore();
+const userStore = useUserStore();
 const toast = useToast();
-const router = useRouter();
 
-const groups = ref<GroupResponse[]>([]);
-const customers = ref<Customer[]>([]);
-const newCustomer = ref({} as CustomerRequest);
-const showCreateDialog = ref(false);
+// Variables reactives
+const showDialog = ref(false);
+const editMode = ref(false);
+const selectedCustomer = ref<Customer | null>(null);
 
+// Filtres de la taula
 const filters = ref({
   comercial_name: { value: null, matchMode: FilterMatchMode.CONTAINS },
   vat_number: { value: null, matchMode: FilterMatchMode.CONTAINS },
   phone_number: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
 
+// Breadcrumb
 const home = ref({
   label: "Inici",
   icon: "pi pi-home",
@@ -115,42 +122,36 @@ const breadcrumbItems = ref([
   },
 ]);
 
+// Lifecycle
 onMounted(async () => {
-  await loadCustomers();
+  await Promise.all([customerStore.fetchCustomers(), userStore.fetchUsers()]);
 });
 
-async function loadCustomers() {
+// Mètodes del diàleg
+const openCreateDialog = () => {
+  editMode.value = false;
+  selectedCustomer.value = null;
+  showDialog.value = true;
+};
+
+const openEditDialog = (customer: Customer) => {
+  editMode.value = true;
+  selectedCustomer.value = customer;
+  showDialog.value = true;
+};
+
+const handleFormSuccess = async () => {
+  // Recarregar la llista de clients després de crear/editar
   await customerStore.fetchCustomers();
-  customers.value = customerStore.customers;
-}
+};
 
-async function handleCreateCustomer(data: CustomerRequest) {
-  try {
-    await customerStore.createCustomer(data);
-    toast.add({
-      severity: "success",
-      summary: "Client creat",
-      detail: `Client "${data.comercial_name}" creat correctament`,
-      life: 3000,
-    });
-    await loadCustomers();
-    showCreateDialog.value = false;
-  } catch (error) {
-    toast.add({
-      severity: "error",
-      summary: "Error",
-      detail: "No s'ha pogut crear el client",
-      life: 3000,
-    });
-    console.error("Error creant el client", error);
-  }
-}
-
-async function handleDelete(customer: Customer) {
-  const confirm = window.confirm(
+// Eliminació de client
+const handleDelete = async (customer: Customer) => {
+  const confirmed = window.confirm(
     `Segur que vols eliminar el client "${customer.comercial_name}"?`
   );
-  if (!confirm) return;
+
+  if (!confirmed) return;
 
   try {
     await customerStore.deleteCustomer(customer.id);
@@ -160,15 +161,28 @@ async function handleDelete(customer: Customer) {
       detail: `Client "${customer.comercial_name}" eliminat correctament`,
       life: 3000,
     });
-    await loadCustomers();
   } catch (error) {
     toast.add({
       severity: "error",
       summary: "Error",
-      detail: `No s'ha pogut eliminar el client`,
+      detail: "No s'ha pogut eliminar el client",
       life: 3000,
     });
-    console.error("Error eliminant el client", error);
+    console.error("Error eliminant el client:", error);
   }
-}
+};
 </script>
+
+<style scoped>
+.card {
+  padding: 1.5rem;
+}
+
+.card h2 {
+  margin-bottom: 1rem;
+}
+
+.p-button {
+  margin-bottom: 1rem;
+}
+</style>

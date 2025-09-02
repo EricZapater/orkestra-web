@@ -27,9 +27,9 @@ export function useMarginColor(
   const margin = ((parsedAmount - parsedCost) / parsedAmount) * 100;
 
   let severity: "success" | "warning" | "danger";
-  if (margin < 5) {
+  if (margin < 10) {
     severity = "danger";
-  } else if (margin < 20) {
+  } else if (margin < 30) {
     severity = "warning";
   } else {
     severity = "success";
