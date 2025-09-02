@@ -84,6 +84,7 @@ const form = ref<CreateUserRequest>({
   email: "",
   username: "",
   password: "",
+  profile_id: "",
 });
 const password2 = ref("");
 
@@ -124,6 +125,7 @@ const resetForm = () => {
     email: "",
     username: "",
     password: "",
+    profile_id: "",
   };
   password2.value = "";
 };
@@ -158,6 +160,7 @@ const handleCreate = async () => {
     email: "",
     username: "",
     password: "",
+    profile_id: "",
   };
   password2.value = "";
 };

@@ -23,18 +23,6 @@ export const useCostItemStore = defineStore("costitem", {
         this.loading = false;
       }
     },
-    async update(id: string, data: CostItemRequest): Promise<AxiosResponse> {
-      try {
-        this.loading = true;
-        const response = await costItemService.update(id, data);
-        if (response.status > 299) throw new Error("Update cost item failed");
-        return response;
-      } catch (error) {
-        throw error;
-      } finally {
-        this.loading = false;
-      }
-    },
     async delete(id: string): Promise<AxiosResponse> {
       try {
         this.loading = true;
@@ -47,31 +35,6 @@ export const useCostItemStore = defineStore("costitem", {
           this.selectedCostItem = null;
         }
         return response;
-      } catch (error) {
-        throw error;
-      } finally {
-        this.loading = false;
-      }
-    },
-    async fetchCostItems(): Promise<void> {
-      try {
-        this.loading = true;
-        const response = await costItemService.getAll();
-        if (response.status > 299)
-          throw new Error("Fetch all cost items failed");
-        this.costItems = response.data;
-      } catch (error) {
-        throw error;
-      } finally {
-        this.loading = false;
-      }
-    },
-    async fetchCostItem(id: string): Promise<void> {
-      try {
-        this.loading = true;
-        const response = await costItemService.getById(id);
-        if (response.status > 299) throw new Error("Fetch cost item failed");
-        this.selectedCostItem = response.data;
       } catch (error) {
         throw error;
       } finally {
