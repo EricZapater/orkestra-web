@@ -37,6 +37,17 @@
         />
         <small v-if="errors.cost" class="p-error">{{ errors.cost }}</small>
       </div>
+      <div class="field">
+        <label for="color">Color</label>
+        <ColorPicker
+          v-model="formData.color"
+          format="hex"
+          :style="{
+            border: formData.color ? '0px solid #ccc' : '1px dashed #ef4444',
+            padding: '0.3rem',
+          }"
+        />
+      </div>
     </div>
     <div class="form-actions">
       <Button
@@ -82,6 +93,7 @@ const formData = ref({
   name: "",
   surname: "",
   cost: 0,
+  color: "",
 });
 
 const errors = ref({
@@ -126,6 +138,7 @@ const resetForm = () => {
     name: "",
     surname: "",
     cost: 0,
+    color: "",
   };
   Object.keys(errors.value).forEach((key) => {
     errors.value[key as keyof typeof errors.value] = "";
@@ -142,6 +155,7 @@ watch(
         name: newOperator.name,
         surname: newOperator.surname,
         cost: newOperator.cost,
+        color: newOperator.color,
       };
     } else {
       // Si no estem editant o no tenim operari, resetegem el formulari

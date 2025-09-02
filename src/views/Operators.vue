@@ -123,6 +123,7 @@ const handleFormSuccess = async (operator: Operator) => {
     name: operator.name,
     surname: operator.surname,
     cost: operator.cost.toString(),
+    color: operator.color,
   };
   if (editMode.value === true) {
     await operatorStore.update(operator.id, request);

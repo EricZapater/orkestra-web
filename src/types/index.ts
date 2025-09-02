@@ -258,6 +258,7 @@ export type OperatorRequest = {
   name: string;
   surname: string;
   cost: string;
+  color: string;
 };
 
 export type Operator = {
@@ -265,6 +266,7 @@ export type Operator = {
   name: string;
   surname: string;
   cost: number;
+  color: string;
 };
 
 export type OperatorToProjectRequest = {
