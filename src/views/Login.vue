@@ -4,36 +4,35 @@
       <h2>Inicia sessió</h2>
 
       <div class="p-fluid">
-        <div class="field two-columns">
-          <div><label for="username">Usuari</label></div>
-          <div><InputText id="username" v-model="username" /></div>
-        </div>
-
-        <div class="field two-columns">
-          <div>
-            <label for="password">{{ $t("login.password") }}</label>
+        <form @submit.prevent="handleLogin">
+          <div class="field two-columns">
+            <div><label for="username">Usuari</label></div>
+            <div><InputText id="username" v-model="username" /></div>
           </div>
-          <div>
-            <Password
-              id="password"
-              v-model="password"
-              toggleMask
-              :feedback="false"
-            />
+          <div class="field two-columns">
+            <div>
+              <label for="password">{{ $t("login.password") }}</label>
+            </div>
+            <div>
+              <Password
+                id="password"
+                v-model="password"
+                toggleMask
+                :feedback="false"
+              />
+            </div>
           </div>
-        </div>
-        <div class="field two-columns">
-          <div>
-            <Button label="Entrar" @click="handleLogin" />
+          <div class="field two-columns">
+            <div><Button label="Entrar" type="submit" /></div>
+            <div>
+              <Button
+                label="Registra't"
+                class="p-button-secondary"
+                @click="$router.push('/register')"
+              />
+            </div>
           </div>
-          <div>
-            <Button
-              label="Registra't"
-              class="p-button-secondary"
-              @click="$router.push('/register')"
-            />
-          </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>

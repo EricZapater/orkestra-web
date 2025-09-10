@@ -241,7 +241,7 @@
                 </template>
               </Column>
               <Column field="cost" header="Cost Jornada" />
-              <Column field="dedicaton_percentage" header="Dedicació" />
+              <Column field="dedication_percentage" header="Dedicació" />
               <Column field="start_date" header="Desde:" />
               <Column field="end_date" header="Fins a:" />
 
@@ -251,7 +251,7 @@
                     icon="pi pi-trash"
                     class="p-button-text p-button-sm"
                     severity="danger"
-                    @click="handleDeleteOperatorFromProject(slotProps.data)"
+                    @click="handleDeleteOperatorFromProject(slotProps.data.id)"
                     title="Eliminar"
                   />
                 </template>
@@ -477,11 +477,9 @@ const handleDeleteCost = async (cost: CostItem) => {
   });
 };
 
-const handleDeleteOperatorFromProject = async (
-  request: OperatorToProjectRequest
-) => {
+const handleDeleteOperatorFromProject = async (request: string) => {
   confirm.require({
-    message: `Estàs segur que vols eliminar el registre "${request.operator_id}"?`,
+    message: `Estàs segur que vols eliminar el registre "${request}"?`,
     header: "Confirmar eliminació",
     icon: "pi pi-exclamation-triangle",
     acceptClass: "p-button-danger",

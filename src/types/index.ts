@@ -283,7 +283,17 @@ export type OperatorToProject = {
   operator_id: string;
   project_id: string;
   cost: number;
-  dedicaton_percentage: number;
+  dedication_percentage: number;
   start_date: string;
   end_date: string;
+};
+
+export type LLMRequest = {
+  question: string;
+  user_id: string;
+}
+
+export type LLMResponse = {
+  answer: string;
+  query: string;
 };

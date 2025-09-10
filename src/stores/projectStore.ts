@@ -85,9 +85,7 @@ export const useProjectStore = defineStore("project", {
         throw error;
       }
     },
-    async RemoveOperatorFromProject(
-      request: OperatorToProjectRequest
-    ): Promise<AxiosResponse> {
+    async RemoveOperatorFromProject(request: string): Promise<AxiosResponse> {
       try {
         const response = await projectService.removeOperatorFromProject(
           request

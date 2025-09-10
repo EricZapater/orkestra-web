@@ -85,13 +85,9 @@ export const projectService = {
       throw error;
     }
   },
-  async removeOperatorFromProject(
-    request: OperatorToProjectRequest
-  ): Promise<AxiosResponse> {
+  async removeOperatorFromProject(id: string): Promise<AxiosResponse> {
     try {
-      const res = await apiClient.delete("/projects/operators", {
-        data: request,
-      });
+      const res = await apiClient.delete(`/projects/operators/${id}`);
       if (res.status > 299) {
         throw new Error("Remove operator from project failed");
       }

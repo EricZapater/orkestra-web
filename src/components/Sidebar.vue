@@ -20,14 +20,66 @@
               <span class="ml-2">{{ item.label }}</span>
             </a>
           </router-link>
+          <a
+            v-else-if="item.llm"
+            v-ripple
+            class="flex items-center py-2 px-3 rounded-md hover:bg-surface-200 cursor-pointer"
+            @click="openLLMModal"
+          >
+            <span :class="item.icon" style="gap: 0.5em" />
+            <span class="ml-2">{{ item.label }}</span>
+          </a>
         </template>
       </Menu>
     </div>
+    <!-- Modal LLM -->
+    <Dialog
+      v-model:visible="showLLMModal"
+      header="Consulta LLM"
+      modal
+      class="llm-dialog"
+    >
+      <div class="task-form">
+        <div class="field full-width">
+          <label for="llm_query">Consulta *</label>
+          <Textarea
+            id="llm_query"
+            v-model="queryText"
+            rows="4"
+            placeholder="Escriu la teva consulta"
+            :autoResize="true"
+          />
+        </div>
+        <div class="form-actions">
+          <Button
+            label="Enviar"
+            class="p-button-primary"
+            @click="sendQuery"
+            :loading="loading"
+            :disabled="!queryText.trim()"
+          />
+          <Button
+            label="Tancar"
+            class="p-button-text"
+            @click="showLLMModal = false"
+          />
+        </div>
+        <div v-if="responseText" class="field full-width">
+          <label>Resposta</label>
+          <div class="p-2 border rounded bg-surface-100">
+            <p>{{ responseText }}</p>
+          </div>
+        </div>
+      </div>
+    </Dialog>
   </aside>
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { llmService } from "../services/llmService";
+import type { LLMRequest } from "../types";
+import { Textarea } from "primevue";
 
 const router = useRouter();
 
@@ -111,7 +163,54 @@ const items = ref([
       },
     ],
   },
+  { separator: true },
+  {
+    label: "Botie IA",
+    icon: "pi pi-android",
+    llm: true,
+  },
 ]);
+
+const showLLMModal = ref(false);
+const queryText = ref("");
+const responseText = ref("");
+const loading = ref(false);
+
+const openLLMModal = () => {
+  showLLMModal.value = true;
+  queryText.value = "";
+  responseText.value = "";
+};
+
+const sendQuery = async () => {
+  if (!queryText.value.trim()) return;
+
+  const userStr = localStorage.getItem("orkestra.user");
+  let userId = "";
+
+  if (userStr) {
+    try {
+      const userObj = JSON.parse(userStr);
+      userId = userObj.id;
+    } catch (e) {
+      console.error("Error parsejant l'usuari del localStorage", e);
+    }
+  }
+
+  loading.value = true;
+  const llmRequest: LLMRequest = {
+    question: queryText.value,
+    user_id: userId,
+  };
+  try {
+    const res = await llmService.query(llmRequest);
+    responseText.value = res.data.answer || "Sense resposta";
+  } catch (err: any) {
+    responseText.value = "Error: " + (err.message || "Problema desconegut");
+  } finally {
+    loading.value = false;
+  }
+};
 </script>
 
 <style>
@@ -149,5 +248,20 @@ const items = ref([
 
 .p-menu .p-menuitem-link:hover {
   background-color: var(--surface-hover);
+}
+
+.llm-dialog {
+  width: 70%;
+}
+.task-form .field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.task-form .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
 }
 </style>
