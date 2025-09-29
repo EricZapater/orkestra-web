@@ -66,6 +66,8 @@ const handleEventClick = async (info: any) => {
     customer_id: projectStore.selectedProject?.customer_id ?? "",
     amount: "0",
     estimated_cost: "0",
+    status: projectStore.selectedProject?.status ?? "Backlog",
+    priority: projectStore.selectedProject?.priority ?? "C",
   };
 };
 
@@ -105,6 +107,8 @@ const newProject = ref<ProjectRequest>({
   customer_id: "",
   amount: "0",
   estimated_cost: "0",
+  status: "Backlog",
+  priority: "C",
 });
 
 const handleAddProject = async () => {
@@ -141,6 +145,8 @@ const handleAddProject = async () => {
         customer_id: projectStore.selectedProject?.customer_id ?? "",
         amount: zero,
         estimated_cost: zero,
+        status: projectStore.selectedProject?.status ?? "Backlog",
+        priority: projectStore.selectedProject?.priority ?? "C",
       });
 
       const res = await projectStore.updateProject(Project.value);
@@ -171,6 +177,8 @@ const handleAddProject = async () => {
       customer_id: "",
       amount: "0",
       estimated_cost: "0",
+      status: "Backlog",
+      priority: "C",
     };
   } catch (error) {
     toast.add({
@@ -192,6 +200,8 @@ const closeProjectModal = () => {
     customer_id: "",
     amount: "0",
     estimated_cost: "0",
+    status: "Backlog",
+    priority: "C",
   };
 };
 
