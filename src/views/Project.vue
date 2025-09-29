@@ -66,7 +66,33 @@
       </div>
       <br />
       <form @submit.prevent="onSubmit" v-if="projectStore.selectedProject">
-        <div class="two-columns">
+        <div class="two-columns mb-3">
+          <div class="field">
+            <label for="status">Estat *</label>
+            <Select
+              id="status"
+              v-model="selectedProject.status"
+              :options="statusOptions"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Selecciona un estat"
+            />
+          </div>
+
+          <!-- Prioritat -->
+          <div class="field">
+            <label for="priority">Prioritat *</label>
+            <Select
+              id="priority"
+              v-model="selectedProject.priority"
+              :options="priorityOptions"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Selecciona una prioritat"
+            />
+          </div>
+        </div>
+        <div class="two-columns mb-3" style="margin-top: 1rem">
           <div style="margin-right: 1rem">
             <label for="start_date" style="margin-right: 1rem">Inici</label>
             <DatePicker
@@ -333,6 +359,7 @@ import CostItemForm from "../components/CostItemForm.vue";
 import Decimal from "decimal.js";
 import { useOperatorStore } from "../stores/operatorStore";
 import OperatorToProjectForm from "../components/OperatorToProjectForm.vue";
+import { label } from "@primeuix/themes/aura/metergroup";
 
 const toast = useToast();
 const projectStore = useProjectStore();
@@ -370,6 +397,20 @@ const editMode = ref(false);
 projectId.value = route.params.id as string;
 
 const selectedProject = computed(() => projectStore.selectedProject!);
+
+const statusOptions = [
+  { label: "En espera", value: "Backlog" },
+  { label: "A punt", value: "ReadyToStart" },
+  { label: "En progrés", value: "InProgress" },
+  { label: "Finalitzat", value: "Done" },
+];
+
+const priorityOptions = [
+  { label: "A - Molt Alta", value: "A" },
+  { label: "B - Alta", value: "B" },
+  { label: "C - Normal", value: "C" },
+  { label: "D - Baixa", value: "D" },
+];
 
 const marginInfo = computed(() =>
   useMarginColor(

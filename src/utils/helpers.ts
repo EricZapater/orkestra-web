@@ -32,3 +32,18 @@ export function generateItems<T>(
   }
   return result;
 }
+
+export function getPrioritySeverity(priority: string): string {
+  switch (priority) {
+    case "A":
+      return "danger";
+    case "B":
+      return "warning";
+    case "C":
+      return "info";
+    case "D":
+      return "success";
+    default:
+      return "secondary";
+  }
+}

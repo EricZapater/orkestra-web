@@ -55,6 +55,34 @@
             }"
           />
         </div>
+        <div class="field full-width">
+          <div class="two-columns">
+            <div class="field">
+              <label for="status">Estat *</label>
+              <Select
+                id="status"
+                v-model="project.status"
+                :options="statusOptions"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Selecciona un estat"
+              />
+            </div>
+
+            <!-- Prioritat -->
+            <div class="field">
+              <label for="priority">Prioritat *</label>
+              <Select
+                id="priority"
+                v-model="project.priority"
+                :options="priorityOptions"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Selecciona una prioritat"
+              />
+            </div>
+          </div>
+        </div>
 
         <!-- Client -->
         <div class="field full-width">
@@ -66,27 +94,6 @@
             optionValue="id"
             placeholder="Selecciona un client"
             class="w-full"
-          />
-        </div>
-      </div>
-      <!-- Partides econòmiques -->
-      <div class="two-columns">
-        <div class="field">
-          <label for="estimated_cost">Cost estimat</label>
-          <InputText
-            id="estimated_cost"
-            v-model="project.estimated_cost"
-            :class="{ 'p-invalid': errors.estimated_cost }"
-            required
-          />
-        </div>
-        <div class="field">
-          <label for="amount">Import venta</label>
-          <InputText
-            id="estimated_cost"
-            v-model="project.amount"
-            :class="{ 'p-invalid': errors.amount }"
-            required
           />
         </div>
       </div>
@@ -119,6 +126,20 @@ const errors = ref({
   estimated_cost: "",
   amount: "",
 });
+
+const statusOptions = [
+  { label: "En espera", value: "Backlog" },
+  { label: "A punt", value: "ReadyToStart" },
+  { label: "En progrés", value: "InProgress" },
+  { label: "Finalitzat", value: "Done" },
+];
+
+const priorityOptions = [
+  { label: "A - Molt Alta", value: "A" },
+  { label: "B - Alta", value: "B" },
+  { label: "C - Normal", value: "C" },
+  { label: "D - Baixa", value: "D" },
+];
 
 const props = defineProps<{
   visible: boolean;

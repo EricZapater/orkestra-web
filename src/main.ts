@@ -9,6 +9,7 @@ import App from "./App.vue";
 import router from "./router";
 
 import {
+  Badge,
   Breadcrumb,
   Button,
   Card,
@@ -62,6 +63,7 @@ app.use(ToastService);
 app.use(i18n);
 app.use(ConfirmationService);
 
+app.component("Badge", Badge);
 app.component("DataTable", DataTable);
 app.component("Column", Column);
 app.component("Button", Button);

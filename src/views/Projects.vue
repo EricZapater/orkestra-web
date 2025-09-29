@@ -15,20 +15,30 @@
       :rows="10"
       :showGridlines="true"
     >
-      <Column field="customer_id" header="Client">
+      <Column field="customer_id" header="Client" sortable>
         <template #body="slotProps">
           {{ customerIdToName.get(slotProps.data.customer_id) || "—" }}
         </template>
       </Column>
       <Column field="description" header="Descripció" />
-      <Column field="start_date" header="Data d'inici">
+      <Column field="start_date" header="Data d'inici" sortable>
         <template #body="slotProps">
           {{ formatDate(slotProps.data.start_date) }}
         </template>
       </Column>
-      <Column field="end_date" header="Data prevista final">
+      <Column field="end_date" header="Data prevista final" sortable>
         <template #body="slotProps">
           {{ formatDate(slotProps.data.end_date) }}
+        </template>
+      </Column>
+      <Column field="status" header="Estat" />
+      <Column field="priority" header="Prioritat" sortable>
+        <template #body="slotProps">
+          <Tag
+            :value="slotProps.data.priority"
+            :severity="getPrioritySeverity(slotProps.data.priority)"
+            class="priority-tag"
+          />
         </template>
       </Column>
       <Column header="Accions" style="width: 10rem">
@@ -76,6 +86,7 @@ import type { ProjectRequest, Project } from "../types";
 import Decimal from "decimal.js";
 import { extractErrorMessage } from "../utils/errormessage";
 import ProjectFormDialog from "../components/ProjectFormDialog.vue";
+import { getPrioritySeverity } from "../utils/helpers";
 
 const toast = useToast();
 const confirm = useConfirm();
@@ -109,6 +120,8 @@ const newProject = ref<ProjectRequest>({
   customer_id: "",
   amount: "0",
   estimated_cost: "0",
+  status: "Backlog",
+  priority: "C",
 });
 
 onMounted(async () => {
@@ -174,6 +187,8 @@ const handleAddProject = async () => {
         customer_id: projectStore.selectedProject?.customer_id ?? "",
         amount: zero,
         estimated_cost: zero,
+        status: projectStore.selectedProject?.status ?? "Backlog",
+        priority: projectStore.selectedProject?.priority ?? "C",
       });
 
       const res = await projectStore.updateProject(Project.value);
@@ -194,6 +209,8 @@ const handleAddProject = async () => {
       customer_id: "",
       amount: "0",
       estimated_cost: "0",
+      status: "Backlog",
+      priority: "C",
     };
   } catch (error) {
     toast.add({

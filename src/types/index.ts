@@ -140,6 +140,8 @@ export type ProjectRequest = {
   customer_id: string;
   amount: string;
   estimated_cost: string;
+  status: "Backlog" | "ReadyToStart" | "InProgress" | "Done";
+  priority: "A" | "B" | "C" | "D";
 };
 
 export type Project = {
@@ -151,6 +153,8 @@ export type Project = {
   customer_id: string;
   amount: Decimal;
   estimated_cost: Decimal;
+  status: "Backlog" | "ReadyToStart" | "InProgress" | "Done";
+  priority: "A" | "B" | "C" | "D";
 };
 
 export type ProjectCalendarResponse = {
@@ -291,7 +295,7 @@ export type OperatorToProject = {
 export type LLMRequest = {
   question: string;
   user_id: string;
-}
+};
 
 export type LLMResponse = {
   answer: string;

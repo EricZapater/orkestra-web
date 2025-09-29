@@ -104,6 +104,11 @@ const items = ref([
         route: "/projects/calendar",
       },
       {
+        label: "Kanban Projectes",
+        icon: "pi pi-calendar",
+        route: "/projects/kanban",
+      },
+      {
         label: "Llistat Tasques",
         icon: "pi pi-list",
         route: "/projects/tasks",

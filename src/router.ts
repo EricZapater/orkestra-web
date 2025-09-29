@@ -19,6 +19,7 @@ import Kanban from "./views/Kanban.vue";
 import Menus from "./views/Menus.vue";
 import Tasks from "./views/Tasks.vue";
 import Operators from "./views/Operators.vue";
+import KanbanProjects from "./views/KanbanProjects.vue";
 
 const routes = [
   { path: "/login", component: Login },
@@ -55,6 +56,11 @@ const routes = [
   {
     path: "/projects",
     component: Projects,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/projects/kanban",
+    component: KanbanProjects,
     meta: { requiresAuth: true },
   },
   {
